@@ -1,4 +1,4 @@
-public class MyArrayDataException extends Throwable {
+public class MyArrayDataException extends IllegalArgumentException {
     private int rowIndex, columnIndex;
 
     public MyArrayDataException(int rowIndex, int columnIndex) {
