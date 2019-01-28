@@ -2,7 +2,7 @@ import java.util.Calendar;
 
 public class Application {
     public static void main(String[] args) {
-        String[][] array = new String [4][4];
+        String[][] array = new String [4][4];//здесь менять размерность для тестирования
 
         //заполнение массива строками
         for (int i=0;i<array.length;i++)
@@ -11,7 +11,7 @@ public class Application {
 
 
 
-          array[2][1]="abc"; //проверка неправильного элемента
+          //array[1][1]="abc"; //здесь проверка неправильного элемента
 
         //вызов метода по суммированию
         try {
@@ -37,20 +37,22 @@ public class Application {
             throw new MyArraySizeException();
 
         //цикл заполнения преобразования и суммирования массива
-        else {
+        else
             for (int i = 0; i < arrayIn.length; i++)
-                for (int j = 0; j < arrayIn[i].length; j++) {
+                for (int j = 0; j < arrayIn[i].length; j++)
                     try
                     {
                         array[i][j] = Integer.parseInt(arrayIn[i][j]);
                         sum = array[i][j] + sum;
                     }
-                    catch (Exception e)
+                    catch (IndexOutOfBoundsException e)
                     {
+                        throw new MyArraySizeException();
+                    }
+                    catch (Exception e){
                         throw new MyArrayDataException(i,j);
                     }
-                }
-        }
+
         return sum;
     }
 
