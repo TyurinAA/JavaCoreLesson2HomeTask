@@ -1,27 +1,32 @@
 package Lesson3HW;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Application {
     public static void main(String[] args) {
         List<String> arrayInitial = new ArrayList<>();
-        List<UniqueWord> arrayFinal = new ArrayList<>();
+        Map<String,Integer> mapFinal = new HashMap<>();
 
+        arrayInitial.add("aa");
+        arrayInitial.add("aa");
+        arrayInitial.add("aa");
+        arrayInitial.add("cc");
+        arrayInitial.add("aa");
+        arrayInitial.add("aa");
+        arrayInitial.add("bb");
+        arrayInitial.add("bb");
 
         //заполнение финального массива уникальными словами и количеством повторений
         for (String word:arrayInitial){
-            if (arrayFinal.indexOf(word)==-1){
-                UniqueWord finalWord = new UniqueWord(word, Collections.frequency(arrayInitial,word));
-                arrayFinal.add(finalWord);
+            if (!mapFinal.containsKey(word)){
+                mapFinal.put(word,Collections.frequency(arrayInitial,word));
             }
         }
         arrayInitial = null; //чистим память
 
         //вывод значений финального листа - можно еще чистку сделать
-        for (UniqueWord word:arrayFinal){
-            System.out.printf("Word %s has frequency %d/n", word.getWord(),word.getCount());
+        for (Map.Entry<String,Integer> words:mapFinal.entrySet()){
+            System.out.printf("Word %s has frequency %d\n", words.getKey(),words.getValue());
         }
     }
 
