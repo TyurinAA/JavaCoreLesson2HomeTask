@@ -16,7 +16,7 @@ public class Application {
         //phoneBook.add(12345, "a");
         //phoneBook.add(12345, "a");
         //phoneBook.add(12345, "a");
-        phoneBook.getPhoneByName("a");
+        phoneBook.getPhoneByName("b");
         task1();
     }
 
