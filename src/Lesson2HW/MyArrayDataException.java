@@ -1,3 +1,5 @@
+package Lesson2HW;
+
 public class MyArrayDataException extends IllegalArgumentException {
     private int rowIndex, columnIndex;
 
