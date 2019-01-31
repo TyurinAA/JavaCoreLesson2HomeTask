@@ -1,5 +1,7 @@
 package Lesson3HW;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +18,14 @@ public class PhoneBook {
         else {
             records.put(phone,sName);
         }
+    }
 
+    public void getPhoneByName (String sName){
+        for (HashMap.Entry<Integer,String> record:records.entrySet()){
+            if (record.getValue().equals(sName)){
+                System.out.printf("To %s belongs the following number: %d\n",sName,record.getKey());
+            }
+        }
     }
 
 }

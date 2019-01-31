@@ -7,6 +7,8 @@ public class Application {
 
         PhoneBook phoneBook;
         phoneBook = new PhoneBook();
+
+        // проверок на корректность аргументов не будет, не имеют смысла
         phoneBook.add(1, "a");
         phoneBook.add(2, "b");
         phoneBook.add(1, "c");
@@ -14,10 +16,8 @@ public class Application {
         //phoneBook.add(12345, "a");
         //phoneBook.add(12345, "a");
         //phoneBook.add(12345, "a");
+        phoneBook.getPhoneByName("a");
         task1();
-
-       // int phone = phoneBook.getPhonebyname("a"); // пока не понятно
-       // System.out.printf("Phone %d belongs to ") // пока не понятно
     }
 
     public static void task1(){
@@ -40,11 +40,12 @@ public class Application {
             }
         }
         arrayInitial = null; //чистим память - вообще стоит это делать?
+        System.out.println("Уникальные эелементы и число их повторений: " + mapFinal.entrySet());
 
-        //вывод значений финального листа - можно еще чистку сделать
-        for (Map.Entry<String,Integer> words:mapFinal.entrySet()){
-            System.out.printf("Word %s has frequency %d\n", words.getKey(),words.getValue());
-        }
+        //вывод значений финального листа
+    //    for (Map.Entry<String,Integer> words:mapFinal.entrySet()){
+    //        System.out.printf("Word %s has frequency %d\n", words.getKey(),words.getValue());
+    //    }
     }
 
 
