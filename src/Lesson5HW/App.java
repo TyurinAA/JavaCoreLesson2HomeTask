@@ -1,7 +1,7 @@
 package Lesson5HW;
 
 public class App {
-    static final int SIZE = 100000;
+    static final int SIZE = 10;
     static final int HALF = SIZE/ 2;
 
 
@@ -13,8 +13,7 @@ public class App {
         for (int i=0;i<arrInitial.length;i++){
             arrInitial[i]=1;
         }
-        float[] arr1 = new float[SIZE];
-        arr1 = arrInitial.clone();
+        float[] arr1 = arrInitial.clone();
         arrayRefactoring(arr1);
         arrayRefactoringThreads(arrInitial);
 
@@ -23,7 +22,7 @@ public class App {
     // method 1 without threads
     public static void arrayRefactoring(float[] arr){
         long start = System.currentTimeMillis();
-        arr = arrayModifier(arr);
+        arr = arrayModifier(arr,0);
         long end = System.currentTimeMillis();
         System.out.printf("array refactoring lasts %f seconds\n",((float)(end - start))/1000);
     }
@@ -36,7 +35,7 @@ public class App {
         float[] arrH1 = new float[HALF];
         float[] arrH2 = new float[HALF];
         System.arraycopy(arr,0,arrH1,0, HALF);
-        System.arraycopy(arr,HALF-1,arrH2,0, HALF);
+        System.arraycopy(arr,HALF,arrH2,0, HALF);
         threadForArray1.setArray(arrH1);
         threadForArray2.setArray(arrH2);
         threadForArray1.start();
@@ -44,18 +43,18 @@ public class App {
         threadForArray1.join();
         threadForArray2.join();
         arrH1 = threadForArray1.getArray();
-        arrH2 = threadForArray1.getArray();
+        arrH2 = threadForArray2.getArray();
         System.arraycopy(arrH1,0,arr,0, HALF);
-        System.arraycopy(arrH2,0,arr,HALF-1,HALF);
+        System.arraycopy(arrH2,0,arr,HALF,HALF);
         long end = System.currentTimeMillis();
         System.out.printf("array refactoring lasts %f seconds\n",((float)(end - start))/1000);
     }
 
 
     // method for array modification
-    public static float[] arrayModifier(float[] arr){
-        for (int i=0;i<arr.length;i++){
-            arr[i]=(float)(arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+    public static float[] arrayModifier(float[] arr, int index){
+        for (int i=index;i<arr.length+index;i++){
+            arr[i-index]=(float)(arr[i-index] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
         }
         return arr;
     }
@@ -67,7 +66,10 @@ public class App {
 
         @Override
         public void run() {
-           this.array = arrayModifier(array);
+           if (this.getName().equals("Thread-0"))
+            this.array = arrayModifier(array,0);
+           else
+               this.array = arrayModifier(array,HALF);
         }
 
         public void setArray (float[] array){
