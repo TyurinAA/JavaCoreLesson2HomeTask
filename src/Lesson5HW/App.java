@@ -1,7 +1,7 @@
 package Lesson5HW;
 
 public class App {
-    static final int SIZE = 10;
+    static final int SIZE = 10000000;
     static final int HALF = SIZE/ 2;
 
 
@@ -30,14 +30,13 @@ public class App {
     //method 2 with threads
     public static void arrayRefactoringThreads(float[] arr) throws InterruptedException {
         long start = System.currentTimeMillis();
-        ThreadForArray threadForArray1 = new ThreadForArray();
-        ThreadForArray threadForArray2 = new ThreadForArray();
+
         float[] arrH1 = new float[HALF];
         float[] arrH2 = new float[HALF];
         System.arraycopy(arr,0,arrH1,0, HALF);
         System.arraycopy(arr,HALF,arrH2,0, HALF);
-        threadForArray1.setArray(arrH1);
-        threadForArray2.setArray(arrH2);
+        ThreadForArray threadForArray1 = new ThreadForArray(arrH1 , 0);
+        ThreadForArray threadForArray2 = new ThreadForArray(arrH2, HALF);
         threadForArray1.start();
         threadForArray2.start();
         threadForArray1.join();
@@ -62,18 +61,18 @@ public class App {
     // thread class
     public static class ThreadForArray extends Thread{
 
-        private float[] array = new float[HALF];
+        private float[] array;
+        private int index;
+
+        public ThreadForArray(float[] array, int index) {
+            this.array = array;
+            this.index = index;
+        }
 
         @Override
         public void run() {
-           if (this.getName().equals("Thread-0"))
-            this.array = arrayModifier(array,0);
-           else
-               this.array = arrayModifier(array,HALF);
-        }
+           this.array = arrayModifier(array,index);
 
-        public void setArray (float[] array){
-            this.array = array;
         }
 
         public float[] getArray() {
