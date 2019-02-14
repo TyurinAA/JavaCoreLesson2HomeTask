@@ -1,41 +1,90 @@
 package Lesson4HW;
 
+import Lesson4HW.Message;
+import Lesson4HW.MessageCellRenderer;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.IOException;
 
 public class MainWindow extends JFrame {
-    private JButton button;
+
     private JTextField textField;
-    private JList<String> list;
-    private DefaultListModel <String> model;
+    private JButton button;
+    private JScrollPane scrollPane;
+    private JList<Message> list;
+    private DefaultListModel<Message> listModel;
+    private JPanel panel;
 
-    public MainWindow() throws HeadlessException {
+    //private Network network;
 
-        setTitle("New net Chart");
+    public MainWindow() {
+
+        //создание самого окна сетевого чата
+        setTitle("Сетевой чат");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBounds(200,200,500,500);
-        textField = new JTextField();
-        button = new JButton("Button");
-        model = new DefaultListModel<String>();
-        list = new JList<String>(model);
-        add(textField,BorderLayout.NORTH);
-        add(button, BorderLayout.SOUTH);
-        add(list, BorderLayout.CENTER);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                model.add(model.size(),textField.getText());
-            }
-        });
-        textField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                model.add(model.size(),textField.getText());
-            }
-        });
-        setVisible(true);
+        setBounds(200, 200, 500, 500);
+        setLayout(new BorderLayout());   // выбор компоновщика элементов
 
+        //создание объекта где храняться сообщения
+        listModel = new DefaultListModel<>();
+        list = new JList<>(listModel);
+        list.setCellRenderer(new MessageCellRenderer());
+
+        panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(list, BorderLayout.SOUTH);
+        panel.setBackground(list.getBackground());
+        scrollPane = new JScrollPane(panel);
+        add(scrollPane, BorderLayout.CENTER);
+
+        textField = new JTextField();
+        button = new JButton("Send");
+
+        button.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                submitMessage("user",textField.getText());
+                textField.setText(null);
+                textField.requestFocus();
+            }
+        });
+
+        textField.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                submitMessage("user",textField.getText());
+                textField.setText(null);
+                textField.requestFocus();
+            }
+        });
+
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent evt) {
+                list.ensureIndexIsVisible(listModel.size() - 1);
+            }
+        });
+
+        panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(button, BorderLayout.EAST);
+        panel.add(textField, BorderLayout.CENTER);
+
+        add(panel, BorderLayout.SOUTH);
+
+
+        setVisible(true);
+        textField.requestFocus();
+    }
+
+    public void submitMessage(String user, String message) {
+        if (message == null || message.isEmpty()) {
+            return;
+        }
+        Message msg = new Message(user, message);
+        listModel.add(listModel.size(), msg);
+        list.ensureIndexIsVisible(listModel.size() - 1);
     }
 }
