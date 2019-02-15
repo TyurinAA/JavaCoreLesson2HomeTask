@@ -16,6 +16,7 @@ public class EchoServer {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("thread created ");
                         try (DataInputStream inp = new DataInputStream(socket.getInputStream());
                              DataOutputStream out = new DataOutputStream((socket.getOutputStream()))){
 
