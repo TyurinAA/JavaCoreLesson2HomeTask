@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements MessageSender {
 
     private JTextField textField;
     private JButton button;
@@ -16,8 +16,8 @@ public class MainWindow extends JFrame {
     private JList<Message> list;
     private DefaultListModel<Message> listModel;
     private JPanel panel;
+    private Network network;
 
-    //private Network network;
 
     public MainWindow() {
 
@@ -46,8 +46,13 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 submitMessage("user",textField.getText());
+
+                network.sentMessage(textField.getText());
+
                 textField.setText(null);
                 textField.requestFocus();
+
+
             }
         });
 
@@ -74,11 +79,20 @@ public class MainWindow extends JFrame {
 
         add(panel, BorderLayout.SOUTH);
 
+        try {
+            network = new Network("localhost", 7777, this);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+
 
         setVisible(true);
         textField.requestFocus();
+
     }
 
+
+    @Override
     public void submitMessage(String user, String message) {
         if (message == null || message.isEmpty()) {
             return;

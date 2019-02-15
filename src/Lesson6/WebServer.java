@@ -17,7 +17,7 @@ public class WebServer {
                try(BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                PrintWriter output = new PrintWriter(socket.getOutputStream())){
 
-                   while (!input.ready());
+                   //while (!input.ready()); //зачем нужен данный цикл? почему браузер иногода передает здесь значение фалс и долго не выбивает его в тру?
 
                    while (input.ready()){
                        System.out.println(input.readLine());
@@ -26,8 +26,8 @@ public class WebServer {
                    output.println("HTTP/1.1 200 OK");
                    output.println("Content-Type: text/html; charset=utf-8");
                    output.println();
-                   output.println("Helloc W!");
-                   output.flush();
+                   output.println("<p>Helloc W!</p>");
+                   output.flush();//почему иногода приходит ответ, а иногда браузер висит? и ответа не приходит?
 
 
                }
