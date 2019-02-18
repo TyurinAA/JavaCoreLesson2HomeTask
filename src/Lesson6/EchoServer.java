@@ -13,6 +13,10 @@ public class EchoServer {
             while (true) {
                 Socket socket = serverSocket.accept();
 
+                ConnectionThread connectionThread = new ConnectionThread(socket);
+                System.out.println("Connection started");
+                connectionThread.start();
+                /*
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -34,10 +38,46 @@ public class EchoServer {
 
 
                     }
-                }).start();
+                }).start();*/
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    public static class ConnectionTread extends Thread{
+        @Override
+        public void run() {
+            ;
+        }
+    }
+
+    public static class ConnectionThread extends Thread{
+        private Socket socket;
+
+        ConnectionThread(Socket socket){
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("thread created ");
+            try (DataInputStream inp = new DataInputStream(socket.getInputStream());
+                 DataOutputStream out = new DataOutputStream((socket.getOutputStream()))){
+
+                while (true){
+                    String msg = inp.readUTF();
+                    System.out.println("Message: " + msg);
+                    out.writeUTF(msg);
+                    out.flush();
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
+
